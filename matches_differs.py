@@ -16,7 +16,7 @@ ACCOUNT_CURRENCY = os.getenv("DERIV_ACCOUNT_CURRENCY", "USD")
 MIN_STAKE = 0.35
 PROFIT_PERCENTAGE = 5.71
 SYMBOL = "1HZ10V"
-MAX_TIMEOUT = 3  # Maximum timeout for trade responses in seconds
+MAX_TIMEOUT = 5  # Maximum timeout for trade responses in seconds
 
 
 class DerivBot:
@@ -117,7 +117,7 @@ class DerivBot:
         await self.ws.send(json.dumps(buy_request))
         contract_id = None
         try:
-            async with asyncio.timeout((random.randint(20, 10*MAX_TIMEOUT)) / 10):
+            async with asyncio.timeout((random.randint(30, 10*MAX_TIMEOUT)) / 10):
                 while True:
                     res = json.loads(await self.ws.recv())
                     msg_type = res.get("msg_type")
@@ -142,7 +142,7 @@ class DerivBot:
     async def check_contract_status(self, contract_id):
         await self.ws.send(json.dumps({"proposal_open_contract": 1, "contract_id": contract_id}))
         try:
-            async with asyncio.timeout(2):
+            async with asyncio.timeout(3):
                 res = json.loads(await self.ws.recv())
                 if res.get("msg_type") == "proposal_open_contract":
                     await self.adjust_stake(res, contract_id)
