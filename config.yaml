@@ -1,0 +1,41 @@
+# Deriv Odd/Even Trading Bot Configuration
+
+# API Configuration
+api:
+  app_id: 1089
+  environment: demo  # Must be 'demo' for safety
+  currency: USD
+  reconnect_attempts: 5
+  reconnect_delay: 2.0
+
+# Risk Management
+risk:
+  max_stake_fraction: 0.02  # 2% of balance
+  max_stake_cap: 0.35       # Hard cap when balance <= $10 (Deriv minimum)
+  daily_loss_cap_fraction: 0.10  # 10% of starting day balance
+  drawdown_stop_fraction: 0.15   # 15% from session peak
+  loss_streak_threshold: 3
+  cooldown_minutes: 10
+  balance_stop_lower: 5.0
+  balance_stop_upper: 10000.0
+
+# Strategy Parameters
+strategy:
+  min_confidence_threshold: 0.55  # Only trade if confidence > 55%
+  lookback_window: 20             # Ticks to analyze for patterns
+  volatility_threshold: 0.02      # Skip if volatility too high
+  frequency_bias_threshold: 0.15  # Deviation from uniform required
+  cooldown_between_trades: 30     # Seconds between trades
+
+# Backtesting
+backtest:
+  min_samples: 1000              # Minimum ticks for valid backtest
+  confidence_level: 0.95         # Statistical confidence required
+  min_edge_threshold: 0.01       # Minimum edge to allow live trading
+
+# Logging
+logging:
+  level: INFO
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  trades_csv: "logs/trades.csv"
+  performance_csv: "logs/performance.csv"
